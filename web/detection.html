@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="face-api.js"></script>
+  <script src="commons.js"></script>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.css">
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+</head>
+<body>
+
+
+  <img id="inputImg" src="" style="max-width: 800px;" />
+  <canvas id="overlay" />
+
+  <script>
+    let minConfidence = 0.5
+    let result
+
+    // function onIncreaseThreshold() {
+    //   minConfidence = Math.min(faceapi.round(minConfidence + 0.1), 1.0)
+    //   $('#minConfidence').val(minConfidence)
+    //   updateResults()
+    // }
+
+    // function onDecreaseThreshold() {
+    //   minConfidence = Math.max(faceapi.round(minConfidence - 0.1), 0.1)
+    //   $('#minConfidence').val(minConfidence)
+    //   updateResults()
+    // }
+
+    // async function loadImageFromUrl(url) {
+    //   const img = await requestExternalImage($('#imgUrlInput').val())
+    //   $('#inputImg').get(0).src = img.src
+    //   updateResults()
+    // }
+
+    async function updateResults() {
+      const inputImgEl = $('#inputImg').get(0)
+      const { width, height } = inputImgEl
+      const canvas = $('#overlay').get(0)
+
+      canvas.width = width
+      canvas.height = height
+
+      result = await faceapi.locateFaces(inputImgEl, minConfidence)
+
+      faceapi.drawDetection('overlay', result.map(det => det.forSize(width, height)))
+    }
+
+    // async function onSelectionChanged(uri) {
+    //   const imgBuf = await fetchImage(uri)
+    //   $(`#inputImg`).get(0).src = (await faceapi.bufferToImage(imgBuf)).src
+    //   updateResults()
+    // }
+
+    // async function run() {
+    //   await faceapi.loadFaceDetectionModel('/')
+    //   // $('#loader').hide()
+    //   // onSelectionChanged($('#selectList select').val())
+    // }
+
+    $(document).ready(function() {
+
+      // return (await fetch(uri)).blob()
+
+      faceapi.loadFaceDetectionModel('/').then(function(res){
+        return fetch('images/bbt1.jpg')
+      })
+      .then(function(response){
+        return response.blob()
+      })
+      .then(function(myBlob){
+        return img_buffer = faceapi.bufferToImage(myBlob)
+      })
+      .then(function(imgBuffer){
+        
+        $('#inputImg').get(0).src = imgBuffer.src
+        updateResults()
+        
+      }) 
+
+
+      // console.log('Inside Fetch Image: ')
+      // // console.log(uri)
+      // console.log( fetch('images/bbt1.jpg').blob() )
+      // console.log('Outside Fetch Image: ')
+
+      // console.log( ( fetch('images/bbt1.jpg')) );
+
+      // const bbt_image = ( await fetch('/images/bbt1.jpg') ).blob()
+
+      // console.log('BBT Images: ');
+      // console.log(bbt_image);
+
+      // renderNavBar('#navbar', 'face_detection')
+      // renderImageSelectList(
+      //   '#selectList',
+      //   async (uri) => {
+      //     await onSelectionChanged(uri)
+      //   },
+      //   'bbt1.jpg'
+      // )
+      // run()
+    })
+  </script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	
+	<head>
+		<script src="face-api.js"></script>
+	  <script src="commons.js"></script>
+	  <link rel="stylesheet" href="styles.css">
+	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.css">
+	  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+	  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+	</head>
+
+	<body>
+
+		<img id="imgdetect" src="" />
+		<canvas id="overlay" > </canvas>
+
+		<script>
+
+			let minConfidence = 0.5
+			let result
+
+			async function updateResults() {
+
+				const inputImgEl = $('#imgdetect').get(0)
+	      const { width, height } = inputImgEl
+	      const canvas = $('#overlay').get(0)
+
+	      canvas.width = width
+	      canvas.height = height
+
+	      result = await faceapi.locateFaces(inputImgEl, minConfidence)
+
+	      faceapi.drawDetection('overlay', result.map(det => det.forSize(width, height)))
+			}
+
+			$(document).ready(function(){
+
+				faceapi.loadFaceDetectionModel('/').then(function(res){
+					return fetch("images/bbt1.jpg")
+      	})
+      	.then(function(response){
+          return response.blob()
+        })
+        .then(function(myBlob){
+          return img_buffer = faceapi.bufferToImage(myBlob)
+        })
+        .then(function(imgBuffer){
+          $('#imgdetect').get(0).src = imgBuffer.src
+          updateResults()
+        })
+
+			})
+
+		</script>
+
+	</body>
+
+</html>

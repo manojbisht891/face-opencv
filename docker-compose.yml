@@ -1,0 +1,112 @@
+version: '3'
+services:
+
+  web:
+    image: drupaldocker/php:7.2-apache
+#    build: .
+    container_name: "face"
+    volumes:
+      - ./web:/var/www/html:consistent
+    ports:
+      - "8076:80"
+#    links:
+#      - redis
+
+#  php:
+#    image: wodby/drupal-php:7.1-dev-4.4.2
+#    container_name: "ilao_php"
+#    environment:
+#      PHP_SENDMAIL_PATH: /usr/sbin/sendmail -t -i -S mailhog:1025
+#      DB_HOST: mariadb
+#      DB_USER: drupal
+#      DB_PASSWORD: drupal
+#      DB_NAME: drupal
+#      DB_DRIVER: mysql
+#    volumes:
+#      - ./docroot:/var/www/html:cached
+#    ports:
+#      - "80:80"
+
+  # mariadb:
+  #   image: wodby/mariadb:10.2-3.1.3
+  #   container_name: "ilao_mariadb"
+  #   stop_grace_period: 30s
+  #   volumes:
+  #     - ./db:/var/lib/mysql/db
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: password
+  #     MYSQL_DATABASE: drupal
+  #     MYSQL_USER: drupal
+  #     MYSQL_PASSWORD: drupal
+
+#  visualizer:
+#    image: dockersamples/visualizer:stable
+#    ports:
+#      - "8090:8080"
+#    volumes:
+#      - "/var/run/docker.sock:/var/run/docker.sock"
+
+  # drush:
+  #   image: "mparker17/mush"
+  #   volumes:
+  #     - ./docroot:/var/www/html
+  #   links:
+  #     - mariadb
+  #     - web
+
+#  portainer:
+#    image: portainer/portainer
+#    container_name: "ilao_portainer"
+#    command: --no-auth -H unix:///var/run/docker.sock
+#    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock
+#    labels:
+#      - 'traefik.backend=portainer'
+#      - 'traefik.port=9000'
+
+#  drush:
+#    image: drupaldocker/drush:8
+#    links:
+#      - mariadb
+#      - web
+#    volumes:
+#      - ./drush:/drush/drush
+
+#    volumes:
+#      - /usr/local/bin/drush
+#      - /usr/local/bin/composer
+
+#  db:
+#    image: mysql
+#    volumes:
+#      - ./db-backups:/docker-entrypoint-initdb.d
+#    environment:
+#      MYSQL_ROOT_PASSWORD: root
+#      MYSQL_DATABASE: ilao
+#      MYSQL_USER: root
+#      MYSQL_PASSWORD: root
+#    ports:
+#      - "3306:3306"
+
+#  pma:
+#    image: phpmyadmin/phpmyadmin
+#    environment:
+#      MYSQL_USER: root
+#      MYSQL_PASSWORD: root
+#      MYSQL_ROOT_PASSWORD: root
+#      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+#    ports:
+#     - "8001:80"
+
+  # redis:
+  #   image: redis
+  #   ports:
+  #     - "6379:6379"
+
+  # mailhog:
+  #   image: mailhog/mailhog:v1.0.0
+  #   ports:
+  #     - "1025:1025"
+  #     - "8025:8025"
+  #   links:
+  #     - web
